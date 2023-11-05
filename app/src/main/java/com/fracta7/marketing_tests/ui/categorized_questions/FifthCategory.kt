@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.AlertDialog
@@ -74,91 +75,100 @@ fun FifthCategory(navController: NavController) {
             })
         }, content = { it ->
 
-            Column(modifier = Modifier.padding(it)) {
-                LinearProgressIndicator(
-                    progress = currentQuestion / 200f, modifier = Modifier.padding(12.dp).fillMaxWidth()
-                )
-                Text(
-                    text = "${currentQuestion + 1}. " + viewModel.questions[currentQuestion].question,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(12.dp),
-                    fontSize = 24.sp
-                )
-                Column(Modifier.selectableGroup()) {
-                    val options = listOf(
-                        viewModel.questions[currentQuestion].option1,
-                        viewModel.questions[currentQuestion].option2,
-                        viewModel.questions[currentQuestion].option3,
-                        viewModel.questions[currentQuestion].option4
+            LazyColumn(modifier = Modifier.padding(it)) {
+                item {
+                    LinearProgressIndicator(
+                        progress = currentQuestion / 200f, modifier = Modifier.padding(12.dp).fillMaxWidth()
                     )
-                    options.forEach { text ->
-                        Divider(Modifier.fillMaxWidth())
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .defaultMinSize(minHeight = 64.dp)
-                                .selectable(
-                                    selected = (text == selectedOption), onClick = {
-                                        selectedOption = text
-                                        if (isOptionCorrect(
-                                                selectedOption, viewModel.questions[currentQuestion]
-                                            )
-                                        ) correctAnswers++
-                                        finishedCurrent = true
-                                    }, role = Role.RadioButton, enabled = !finishedCurrent
-                                )
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(selected = (text == selectedOption), onClick = null)
-                            val tColor = if (selectedOption == text) {
-                                color
-                            } else MaterialTheme.colorScheme.onBackground
-                            val wColor = if (isOptionCorrect(
-                                    text, viewModel.questions[currentQuestion]
-                                ) && finishedCurrent
-                            ) Color.Green else MaterialTheme.colorScheme.onBackground
-                            Text(
-                                text = text,
-                                modifier = Modifier.padding(start = 16.dp),
-                                color = if (selectedOption == text) tColor else wColor
-                            )
-                        }
-                        Divider(Modifier.fillMaxWidth())
-                    }
-
                 }
-                Button(
-                    onClick = {
-                        selectedOption = "-"
-                        finishedCurrent = false
-                        when (currentQuestion) {
+                item {
+                    Text(
+                        text = "${currentQuestion + 1}. " + viewModel.questions[currentQuestion].question,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(12.dp),
+                        fontSize = 24.sp
+                    )
+                }
+                item {
+                    Column(Modifier.selectableGroup()) {
+                        val options = listOf(
+                            viewModel.questions[currentQuestion].option1,
+                            viewModel.questions[currentQuestion].option2,
+                            viewModel.questions[currentQuestion].option3,
+                            viewModel.questions[currentQuestion].option4
+                        )
+                        options.forEach { text ->
+                            Divider(Modifier.fillMaxWidth())
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .defaultMinSize(minHeight = 64.dp)
+                                    .selectable(
+                                        selected = (text == selectedOption), onClick = {
+                                            selectedOption = text
+                                            if (isOptionCorrect(
+                                                    selectedOption, viewModel.questions[currentQuestion]
+                                                )
+                                            ) correctAnswers++
+                                            finishedCurrent = true
+                                        }, role = Role.RadioButton, enabled = !finishedCurrent
+                                    )
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(selected = (text == selectedOption), onClick = null)
+                                val tColor = if (selectedOption == text) {
+                                    color
+                                } else MaterialTheme.colorScheme.onBackground
+                                val wColor = if (isOptionCorrect(
+                                        text, viewModel.questions[currentQuestion]
+                                    ) && finishedCurrent
+                                ) Color.Green else MaterialTheme.colorScheme.onBackground
+                                Text(
+                                    text = text,
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    color = if (selectedOption == text) tColor else wColor
+                                )
+                            }
+                            Divider(Modifier.fillMaxWidth())
+                        }
+
+                    }
+                }
+                item {
+                    Button(
+                        onClick = {
+                            selectedOption = "-"
+                            finishedCurrent = false
+                            when (currentQuestion) {
+                                199 -> {
+                                    openDialog = true
+                                }
+
+                                else -> {
+                                    currentQuestion++
+                                }
+                            }
+                        },
+                        enabled = finishedCurrent,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                            .size(height = 48.dp, width = 64.dp)
+                    ) {
+                        val text = when (currentQuestion) {
                             199 -> {
-                                openDialog = true
+                                "Complete"
                             }
 
                             else -> {
-                                currentQuestion++
+                                "Next"
                             }
                         }
-                    },
-                    enabled = finishedCurrent,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                        .size(height = 48.dp, width = 64.dp)
-                ) {
-                    val text = when (currentQuestion) {
-                        199 -> {
-                            "Complete"
-                        }
-
-                        else -> {
-                            "Next"
-                        }
+                        Text(text = text)
                     }
-                    Text(text = text)
                 }
+
             }
             if (openDialog) {
                 AlertDialog(onDismissRequest = {

@@ -25,10 +25,10 @@ class RandomViewModel @Inject constructor(
 
     fun getQuestions(context: Context) {
         val questions1 = getQuestions(context = context, fileName = "1.csv")
-        val questions2 = getQuestions(context = context, fileName = "1.csv")
-        val questions3 = getQuestions(context = context, fileName = "1.csv")
-        val questions4 = getQuestions(context = context, fileName = "1.csv")
-        val questions5 = getQuestions(context = context, fileName = "1.csv")
+        val questions2 = getQuestions(context = context, fileName = "2.csv")
+        val questions3 = getQuestions(context = context, fileName = "3.csv")
+        val questions4 = getQuestions(context = context, fileName = "4.csv")
+        val questions5 = getQuestions(context = context, fileName = "5.csv")
 
         questions.addAll(getRandomQuestions(questions1, 15))
         questions.addAll(getRandomQuestions(questions2, 15))

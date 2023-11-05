@@ -1,6 +1,5 @@
 package com.fracta7.marketing_tests.ui.categorized_questions
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -11,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -42,36 +42,39 @@ fun CategorizedMenu(navController: NavController) {
                 })
         },
         content = {
-            LazyColumn(modifier = Modifier.padding(it)){
-                item{
+            LazyColumn(
+                modifier = Modifier.padding(it),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
                     Button(onClick = {
-                                     navController.navigate(Screens.FirstCategoryScreen.route)
+                        navController.navigate(Screens.FirstCategoryScreen.route)
                     }, modifier) {
                         Text(text = "Introduction to Economics")
                     }
                 }
-                item{
+                item {
                     Button(onClick = {
                         navController.navigate(Screens.SecondCategoryScreen.route)
                     }, modifier) {
                         Text(text = "Introduction to Management & Marketing")
                     }
                 }
-                item{
+                item {
                     Button(onClick = {
                         navController.navigate(Screens.ThirdCategoryScreen.route)
                     }, modifier) {
                         Text(text = "Introduction to Tourism and Hospitality Business")
                     }
                 }
-                item{
+                item {
                     Button(onClick = {
                         navController.navigate(Screens.FourthCategoryScreen.route)
                     }, modifier) {
                         Text(text = "Information Communication Technology in Tourism")
                     }
                 }
-                item{
+                item {
                     Button(onClick = {
                         navController.navigate(Screens.FifthCategoryScreen.route)
                     }, modifier) {
